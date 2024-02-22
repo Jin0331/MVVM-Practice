@@ -29,7 +29,7 @@ class ViewController: UIViewController {
 
     @objc func numberTextFieldChanged() {
 
-        viewModel.inputText.text = mainView.userTextField.text!
+        viewModel.inputText.value = mainView.userTextField.text!
         
     }
 

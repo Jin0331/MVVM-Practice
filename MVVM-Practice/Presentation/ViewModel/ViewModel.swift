@@ -16,7 +16,7 @@ class ViewModel {
     
     init() {
         inputText.bind { value in  // 값이 변결될 때마다, validation(유효성 검사)을 실행한다.
-            self.validation(value)
+            self.validation(value!)
         }
     }
     
@@ -24,12 +24,12 @@ class ViewModel {
     private func validation(_ text : String) {
         //1. 반값
         if text.isEmpty {
-            outputResult.text =  "값을 입력해주세요"
+            outputResult.value =  "값을 입력해주세요"
         }
         
         //2. 문자열
         guard let num = Int(text) else {
-            outputResult.text =  "숫자만 입력해주세요"
+            outputResult.value =  "숫자만 입력해주세요"
             return
         }
         
@@ -39,9 +39,9 @@ class ViewModel {
             format.numberStyle = .decimal
             let result = format.string(for: num)
             
-            outputResult.text = result!
+            outputResult.value = result!
         } else {
-            outputResult.text =  "100만원 이하로 입력해주세요."
+            outputResult.value =  "100만원 이하로 입력해주세요."
         }
     }
     

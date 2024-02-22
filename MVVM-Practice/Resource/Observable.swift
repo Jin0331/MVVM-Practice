@@ -7,25 +7,27 @@
 
 import Foundation
 
-class Observable {
+class Observable<T> { // 제네릭을 사용하면 좀더 유동적으로 사용할 수 있따.
     
-    private var closure : ((String) -> Void)? // 값이 변화되었을 때, 어떤 동작을 할지 Function Type으로 설정.
-    
-    // text가 변경되었을 때(didSet), 입력받은 Function Type이 있을 경우, 현재의 text를 해당 closure로 동작한다
-    var text : String {
+    // 2. value가 변하면 didSet에 의해 변경된 value 값을 갖고 listener 동작을 실행합니다.
+    var value: T? {
         didSet {
-            closure?(text)
+            self.listener?(value)
         }
     }
     
-    init(_ text : String) {
-        self.text = text
+    init(_ value: T?) {
+        self.value = value
     }
     
-    func bind(_ closure : @escaping (String) -> Void) {
-        
-        closure(text) // 우선 입력받은 closure를 실행
-        self.closure = closure // 입력받은 clousre를 등록한다. 이후, text가 변경될 때마다 해당 closure가 실행된다.
-    }
+    // 동작을 담아두는 클로저입니다. (실행 X)
+    private var listener: ((T?) -> Void)?
     
+    // 1. 이 함수가 호출이 되면 아래와 같은 작업을 실행
+    func bind(_ listener: @escaping (T?) -> Void) {
+        // completion에서 value의 값을 갖고 동작을 실행시킨다.
+        listener(value)
+        // 다음으로 위의 동작을 listener에 저장시킨다.
+        self.listener = listener
+    }
 }
